@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using schedule_api.Entities;
 
-namespace schedule_api.Entities
+namespace schedule_api.Services
 {
     public class TransitInfoContext : DbContext
     {
         public DbSet<TopLevelRoute> TopLevelRoutes { get; set; }
-        public DbSet<Route> Routes { get; set; }
+        public DbSet<Entities.Route> Routes { get; set; }
         public DbSet<Stop> Stops { get; set; }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace schedule_api.Entities
             TimeSpan MINS_15 = TimeSpan.FromMinutes(15);
             TimeSpan MINS_20 = TimeSpan.FromMinutes(20);
 
-            modelBuilder.Entity<Route>()
+            modelBuilder.Entity<Entities.Route>()
                 .HasOne(r => r.TopLevelRoute)
                 .WithMany(tlr => tlr.ChildRoutes)
                 .HasForeignKey(r => r.TopLevelRouteId);
@@ -49,7 +50,7 @@ namespace schedule_api.Entities
                 new TopLevelRoute() { TopLevelRouteId = 2, TopLevelRouteName = "DASH Downtown F Southbound" }
             );
 
-            modelBuilder.Entity<Route>().HasData(
+            modelBuilder.Entity<Entities.Route>().HasData(
                 new { RouteId = 1, TopLevelRouteId = 1, Start = AM_6, End = PM_9, Frequency = MINS_10, ScheduleDay = ScheduleDay.Weekdays },
                 new { RouteId = 2, TopLevelRouteId = 1, Start = AM_9, End = PM_9, Frequency = MINS_15, ScheduleDay = ScheduleDay.Saturday },
                 new { RouteId = 3, TopLevelRouteId = 1, Start = AM_9, End = PM_9, Frequency = MINS_15, ScheduleDay = ScheduleDay.Sunday },
