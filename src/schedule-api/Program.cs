@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using schedule_api.Entities;
 using schedule_api.Services;
 using schedule_api.Utilities;
-using System.Runtime.CompilerServices;
 
 namespace schedule_api
 {

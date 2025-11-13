@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using schedule_api.Entities;
+using schedule_api.Services;
 
 namespace schedule_api.Utilities
 {
