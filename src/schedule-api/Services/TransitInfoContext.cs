@@ -21,11 +21,8 @@ namespace schedule_api.Services
             TimeSpan AM_6 = TimeSpan.FromHours(6);
             TimeSpan AM_9 = TimeSpan.FromHours(9);
             TimeSpan PM_9 = TimeSpan.FromHours(23);
-            TimeSpan MINS_0 = TimeSpan.FromMinutes(0);
-            TimeSpan MINS_5 = TimeSpan.FromMinutes(5);
             TimeSpan MINS_10 = TimeSpan.FromMinutes(10);
             TimeSpan MINS_15 = TimeSpan.FromMinutes(15);
-            TimeSpan MINS_20 = TimeSpan.FromMinutes(20);
 
             modelBuilder.Entity<Entities.Route>()
                 .HasOne(r => r.TopLevelRoute)
@@ -59,56 +56,69 @@ namespace schedule_api.Services
                 new { RouteId = 6, TopLevelRouteId = 2, Start = AM_9, End = PM_9, Frequency = MINS_15, ScheduleDay = ScheduleDay.Sunday }
             );
 
-            modelBuilder.Entity<Stop>().HasData(
-                new { StopId = 1, Address = "Vermont Ave & Exposition Blvd" },
-                new { StopId = 2, Address = "Vermont Ave & 37th Pl" },
-                new { StopId = 3, Address = "Vermont Ave & 36th Pl" },
-                new { StopId = 4, Address = "Jefferson Blvd & Vermont Ave" },
-                new { StopId = 5, Address = "Jefferson Blvd & McClintock Ave" }
-            );
+            var StopAddresses = new List<string>()
+            {
+                "Beaudry Ave & 3rd St",
+                "4th St & Figueroa St",
+                "Flower St & 5th St",
+                "Flower St & 7th St",
+                "Flower St & 8th St",
+                "Flower St & 9th St",
+                "Flower St & Olympic Blvd",
+                "Figueroa & 12th St (Crypto.com Arena)",
+                "Figueroa St & Pico Blvd",
+                "Figueroa St & Venice Blvd",
+                "Figueroa St & Washington Blvd",
+                "Figueroa St & 23rd St",
+                "Figueroa St & Adams Blvd",
+                "Figueroa St & 30th St",
+                "Figueroa St & Jefferson Blvd",
+                "Figueroa St & McCarthy Way",
+                "Exposition Blvd & Trousdale Pkwy",
+                "Exposition Blvd & Watt Way",
+            };
+
+            var stops = Enumerable
+                .Range(1, StopAddresses.Count)
+                .Select(i => new Stop() { StopId = i, Address = StopAddresses[i - 1] });
+
+            modelBuilder.Entity<Stop>().HasData(stops);
+
+            // Define route stops with schedule offsets
+            // All stops are spaced 3 minutes apart, to facilitate generating the schedule data easily.
+            // 
+            var route1Stops = Enumerable
+                .Range(0, StopAddresses.Count)
+                .Select(i => new Schedule() { RouteId = 1, StopId = i+1, ScheduleOffset = TimeSpan.FromMinutes(i * 3) });
+
+            var route2Stops = Enumerable
+                .Range(0, StopAddresses.Count)
+                .Select(i => new Schedule() { RouteId = 2, StopId = i+1, ScheduleOffset = TimeSpan.FromMinutes(i * 3) });
+
+            var route3Stops = Enumerable
+                .Range(0, StopAddresses.Count)
+                .Select(i => new Schedule() { RouteId = 3, StopId = i+1, ScheduleOffset = TimeSpan.FromMinutes(i * 3) });
+
+            var route4Stops = Enumerable
+                .Range(0, StopAddresses.Count)
+                .Select(i => new Schedule() { RouteId = 4, StopId = StopAddresses.Count - i, ScheduleOffset = TimeSpan.FromMinutes(i * 3) });
+
+            var route5Stops = Enumerable
+                .Range(0, StopAddresses.Count)
+                .Select(i => new Schedule() { RouteId = 5, StopId = StopAddresses.Count - i, ScheduleOffset = TimeSpan.FromMinutes(i * 3) });
+
+            var route6Stops = Enumerable
+                .Range(0, StopAddresses.Count)
+                .Select(i => new Schedule() { RouteId = 6, StopId = StopAddresses.Count - i, ScheduleOffset = TimeSpan.FromMinutes(i * 3) });
+
 
             modelBuilder.Entity<Schedule>().HasData(
-                // Route 1 Stops
-                new { RouteId = 1, StopId = 1, ScheduleOffset = MINS_0 },
-                new { RouteId = 1, StopId = 2, ScheduleOffset = MINS_5 },
-                new { RouteId = 1, StopId = 3, ScheduleOffset = MINS_10 },
-                new { RouteId = 1, StopId = 4, ScheduleOffset = MINS_15 },
-                new { RouteId = 1, StopId = 5, ScheduleOffset = MINS_20 },
-
-                // Route 2 Stops
-                new { RouteId = 2, StopId = 1, ScheduleOffset = MINS_0 },
-                new { RouteId = 2, StopId = 2, ScheduleOffset = MINS_5 },
-                new { RouteId = 2, StopId = 3, ScheduleOffset = MINS_10 },
-                new { RouteId = 2, StopId = 4, ScheduleOffset = MINS_15 },
-                new { RouteId = 2, StopId = 5, ScheduleOffset = MINS_20 },
-
-                // Route 3 Stops
-                new { RouteId = 3, StopId = 1, ScheduleOffset = MINS_0 },
-                new { RouteId = 3, StopId = 2, ScheduleOffset = MINS_5 },
-                new { RouteId = 3, StopId = 3, ScheduleOffset = MINS_10 },
-                new { RouteId = 3, StopId = 4, ScheduleOffset = MINS_15 },
-                new { RouteId = 3, StopId = 5, ScheduleOffset = MINS_20 },
-
-                // Route 4 Stops
-                new { RouteId = 4, StopId = 5, ScheduleOffset = MINS_0 },
-                new { RouteId = 4, StopId = 4, ScheduleOffset = MINS_5 },
-                new { RouteId = 4, StopId = 3, ScheduleOffset = MINS_10 },
-                new { RouteId = 4, StopId = 2, ScheduleOffset = MINS_15 },
-                new { RouteId = 4, StopId = 1, ScheduleOffset = MINS_20 },
-
-                // Route 5 Stops
-                new { RouteId = 5, StopId = 5, ScheduleOffset = MINS_0 },
-                new { RouteId = 5, StopId = 4, ScheduleOffset = MINS_5 },
-                new { RouteId = 5, StopId = 3, ScheduleOffset = MINS_10 },
-                new { RouteId = 5, StopId = 2, ScheduleOffset = MINS_15 },
-                new { RouteId = 5, StopId = 1, ScheduleOffset = MINS_20 },
-
-                // Route 6 Stops
-                new { RouteId = 6, StopId = 5, ScheduleOffset = MINS_0 },
-                new { RouteId = 6, StopId = 4, ScheduleOffset = MINS_5 },
-                new { RouteId = 6, StopId = 3, ScheduleOffset = MINS_10 },
-                new { RouteId = 6, StopId = 2, ScheduleOffset = MINS_15 },
-                new { RouteId = 6, StopId = 1, ScheduleOffset = MINS_20 }
+                route1Stops
+                .Concat(route2Stops)
+                .Concat(route3Stops)
+                .Concat(route4Stops)
+                .Concat(route5Stops)
+                .Concat(route6Stops)
             );
 
             base.OnModelCreating(modelBuilder);

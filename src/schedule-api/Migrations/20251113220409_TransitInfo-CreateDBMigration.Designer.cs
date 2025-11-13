@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using schedule_api.Services;
 
@@ -10,9 +11,11 @@ using schedule_api.Services;
 namespace schedule_api.Migrations
 {
     [DbContext(typeof(TransitInfoContext))]
-    partial class TransitInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20251113220409_TransitInfo-CreateDBMigration")]
+    partial class TransitInfoCreateDBMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.22");
