@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schedule_api.Entities;
+using schedule_api.Models;
 using schedule_api.Services;
+using System.Text.Json;
 
 namespace schedule_api.Controllers
 {
@@ -21,31 +23,30 @@ namespace schedule_api.Controllers
         /// <summary>
         /// Fetch routes
         /// </summary>
-        /// <returns>TBD</returns>
+        /// <returns>A list of route name/id pairs</returns>
         [HttpGet("transitInfo/routes")]
-        public async Task<ActionResult<List<TopLevelRoute>>> GetRoutes()
+        public async Task<ActionResult<List<TopLevelRouteInfoModel>>> GetRoutes()
         {
             logger.Log(LogLevel.Information, nameof(GetRoutes));
 
             var routes = await transitInfo.GetRoutes();
 
-            return Ok(routes.Select(r => new 
-            {
-                topLevelRouteId = r.TopLevelRouteId,
-                routeName = r.TopLevelRouteName 
-            }));
+            return Ok(routes);
         }
 
         /// <summary>
         /// Fetch stops, given a route
         /// </summary>
         /// <returns>TBD</returns>
-        [HttpGet("transitInfo/stops/{routeId}")]
-        public async Task<IActionResult> GetStops(int routeId)
+        [HttpGet("transitInfo/stops/{topLevelRouteId}")]
+        public async Task<ActionResult> GetStops(int topLevelRouteId)
         {
             logger.Log(LogLevel.Information, nameof(GetStops));
 
-            throw new NotImplementedException();
+            var routeId = await transitInfo.GetRouteIdForDay(topLevelRouteId, DateTime.Now.DayOfWeek);
+            var routeStops = await transitInfo.GetStops(routeId);
+
+            return Ok(routeStops);
         }
 
         /// <summary>
@@ -53,11 +54,13 @@ namespace schedule_api.Controllers
         /// </summary>
         /// <returns>TBD</returns>
         [HttpGet("transitInfo/nextScheduledTime/{routeId}/{stopId}")]
-        public async Task<IActionResult> GetNextScheduledTime(int routeId, int stopId)
+        public async Task<ActionResult<NextScheduledTimeModel>> GetNextScheduledTime(int routeId, int stopId)
         {
             logger.Log(LogLevel.Information, nameof(GetStops));
 
-            throw new NotImplementedException();
+            var nextScheduledTime = await transitInfo.GetNextScheduledTime(routeId, stopId, DateTime.Now);
+
+            return Ok(nextScheduledTime);
         }
     }
 }

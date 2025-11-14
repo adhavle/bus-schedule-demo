@@ -11,8 +11,8 @@ using schedule_api.Services;
 namespace schedule_api.Migrations
 {
     [DbContext(typeof(TransitInfoContext))]
-    [Migration("20251113220409_TransitInfo-CreateDBMigration")]
-    partial class TransitInfoCreateDBMigration
+    [Migration("20251114003513_TransitInfoDB-Create-Migration")]
+    partial class TransitInfoDBCreateMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,7 +119,7 @@ namespace schedule_api.Migrations
 
                     b.HasIndex("StopId");
 
-                    b.ToTable("Schedule");
+                    b.ToTable("RouteSchedules");
 
                     b.HasData(
                         new

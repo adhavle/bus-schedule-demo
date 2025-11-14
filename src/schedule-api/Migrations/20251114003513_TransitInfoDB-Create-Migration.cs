@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace schedule_api.Migrations
 {
     /// <inheritdoc />
-    public partial class TransitInfoCreateDBMigration : Migration
+    public partial class TransitInfoDBCreateMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,7 @@ namespace schedule_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Schedule",
+                name: "RouteSchedules",
                 columns: table => new
                 {
                     RouteId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -72,15 +72,15 @@ namespace schedule_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Schedule", x => new { x.RouteId, x.StopId });
+                    table.PrimaryKey("PK_RouteSchedules", x => new { x.RouteId, x.StopId });
                     table.ForeignKey(
-                        name: "FK_Schedule_Routes_RouteId",
+                        name: "FK_RouteSchedules_Routes_RouteId",
                         column: x => x.RouteId,
                         principalTable: "Routes",
                         principalColumn: "RouteId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Schedule_Stops_StopId",
+                        name: "FK_RouteSchedules_Stops_StopId",
                         column: x => x.StopId,
                         principalTable: "Stops",
                         principalColumn: "StopId",
@@ -135,7 +135,7 @@ namespace schedule_api.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Schedule",
+                table: "RouteSchedules",
                 columns: new[] { "RouteId", "StopId", "ScheduleOffset" },
                 values: new object[,]
                 {
@@ -255,8 +255,8 @@ namespace schedule_api.Migrations
                 column: "TopLevelRouteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schedule_StopId",
-                table: "Schedule",
+                name: "IX_RouteSchedules_StopId",
+                table: "RouteSchedules",
                 column: "StopId");
         }
 
@@ -264,7 +264,7 @@ namespace schedule_api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Schedule");
+                name: "RouteSchedules");
 
             migrationBuilder.DropTable(
                 name: "Routes");

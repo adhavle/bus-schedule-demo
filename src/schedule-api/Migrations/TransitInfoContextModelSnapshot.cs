@@ -116,7 +116,7 @@ namespace schedule_api.Migrations
 
                     b.HasIndex("StopId");
 
-                    b.ToTable("Schedule");
+                    b.ToTable("RouteSchedules");
 
                     b.HasData(
                         new
