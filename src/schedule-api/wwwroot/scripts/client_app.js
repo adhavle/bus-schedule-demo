@@ -21,14 +21,18 @@ async function showRoutes() {
         const result = await response.json();
         console.log(result);
 
-        var routesHtml = "<p>Routes</p>";
+        var routesHtml = "";
         result.forEach(r => {
-            routesHtml += `<button type="button" class="btn btn-primary" `;
+            routesHtml += `<button type="button" class="btn btn-primary w-100" `;
             routesHtml += `onclick="showStops(${r.topLevelRouteId})"`
             routesHtml += `>${r.routeName}</button><br><br>`;
         });
 
         $("#routes").html(routesHtml);
+        $('#routes').removeClass('transitInfo-display-none');
+        $('#stops').addClass('transitInfo-display-none');
+        $('#schedule').addClass('transitInfo-display-none');
+
     } catch (error) {
         console.error(error.message);
     }
@@ -47,9 +51,9 @@ async function showStops(tlrId) {
         console.log(result);
 
         /// TBD: add spacing, fix button width
-        var stopsHtml = "<p>Select a stop</p>";
+        var stopsHtml = "";
         result.stops.forEach(s => {
-            stopsHtml += `<button type="button" class="btn btn-secondary" `
+            stopsHtml += `<button type="button" class="btn btn-secondary mt-1 w-100" `
             stopsHtml += `onclick="showNextScheduledTime(${result.routeId}, ${s.stopId})">`
             stopsHtml +=`${s.address}</button><br>`;
         });
@@ -79,11 +83,14 @@ async function showNextScheduledTime(routeId, stopId) {
 
         scheduleHtml = "";
         if (result.isServiceEndedForDay) {
-            scheduleHtml += `<p>Sorry, no further service at ${result.address} for today.</p>`;
+            scheduleHtml += `<p class="alert alert-warning">Sorry, no further service at ${result.address} for today.</p>`;
         }
         else {
-            scheduleHtml += `<p>Your next bus at ${result.address} will be at ${result.nextScheduledTime}`;
+            scheduleHtml += `<p class="alert alert-info">Your next bus at ${result.address} will be at ${result.nextScheduledTime}</p>`;
         }
+
+        scheduleHtml += '<br><br><button type="button" class="btn btn-success w-100"';
+        scheduleHtml += ' onclick="showRoutes()">Back To Routes</button>';
 
         // update list of stops
         $("#schedule").html(scheduleHtml);
