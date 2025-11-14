@@ -20,6 +20,11 @@ src
 - The dataset is a SQLLite dataset which gets built at first run by applying a migration. The unit tests depend on this same dataset.
 
 ## Schema
+- `TopLevelRoutes` represents an external user-facing Route (for example "Downtown F Northbound")
+- `Routes` are the child routes of a TopLevelRoute - they can have different daily start and end times, and frequencies, depending on the day.
+- While a route may operate differnetly on different days of the week, this schema makes the simplifying assumption that weekday operations are uniform, and uses `ScheduleDay = Weekdays` to represent such a route.
+- `Stops` are bus stops.
+- `Routes` traverses many `Stops`. `Stops` can serve many `Routes`. `RouteSchedules` maps `Routes` to `Stops` and vice-versa, along with how long the bus takes along its route, to get to that stop, from the first stop (`ScheduleOffset`)
 ```mermaid
 erDiagram
     TopLevelRoutes ||..|{ Routes : Weekday-or-Weekend-Routes
