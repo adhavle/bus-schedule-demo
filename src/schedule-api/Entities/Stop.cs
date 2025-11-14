@@ -11,8 +11,14 @@ namespace schedule_api.Entities
 
         [Required]
         [MaxLength(100)]
-        public string? Address { get; set; }
+        public string Address { get; set; }
 
         public List<Schedule> RouteSchedule { get; set; } = new();
+
+        public Stop(int stopId, string address)
+        {
+            StopId = stopId;
+            Address = address;
+        }
     }
 }

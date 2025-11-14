@@ -81,7 +81,7 @@ namespace schedule_api.Services
 
             var stops = Enumerable
                 .Range(1, StopAddresses.Count)
-                .Select(i => new Stop() { StopId = i, Address = StopAddresses[i - 1] });
+                .Select(i => new Stop(i, StopAddresses[i-1]));
 
             modelBuilder.Entity<Stop>().HasData(stops);
 

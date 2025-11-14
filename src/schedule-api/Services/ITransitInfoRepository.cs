@@ -11,6 +11,10 @@ namespace schedule_api.Services
 
         Task<RouteInfoModel> GetStops(int routeId);
 
-        Task<NextScheduledTimeModel> GetNextScheduledTime(int routeId, int stopId, DateTime requestTime);
+        Task<Entities.Route> GetRouteById(int routeId);
+
+        Task<Stop> GetStopById(int stopId);
+
+        Task<Schedule> GetScheduleByRouteAndStopId(int routeId, int stopId);
     }
 }
