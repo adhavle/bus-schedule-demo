@@ -3,6 +3,7 @@ using schedule_api.Entities;
 using schedule_api.Models;
 using schedule_api.Services;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace schedule_api.Controllers
 {
@@ -43,8 +44,17 @@ namespace schedule_api.Controllers
         {
             logger.Log(LogLevel.Information, nameof(GetStops));
 
-            var routeId = await transitInfo.GetRouteIdForDay(topLevelRouteId, DateTime.Now.DayOfWeek);
-            var routeStops = await transitInfo.GetStops(routeId);
+            RouteInfoModel routeStops;
+
+            try
+            {
+                int routeId = await transitInfo.GetRouteIdForDay(topLevelRouteId, DateTime.Now.DayOfWeek);
+                routeStops = await transitInfo.GetStops(routeId);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
 
             return Ok(routeStops);
         }
@@ -58,7 +68,27 @@ namespace schedule_api.Controllers
         {
             logger.Log(LogLevel.Information, nameof(GetStops));
 
-            var nextScheduledTime = await transitInfo.GetNextScheduledTime(routeId, stopId, DateTime.Now);
+            Entities.Route route;
+            Stop stop;
+            Schedule schedule;
+            try
+            {
+                route = await transitInfo.GetRouteById(routeId);
+                stop = await transitInfo.GetStopById(stopId);
+                schedule = await transitInfo.GetScheduleByRouteAndStopId(routeId, stopId);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
+
+
+            var nextScheduledTime = NextScheduledTimeModel.CalculateNextScheduledTime(
+                stopId,
+                route,
+                stop,
+                schedule,
+                DateTime.Now);
 
             return Ok(nextScheduledTime);
         }

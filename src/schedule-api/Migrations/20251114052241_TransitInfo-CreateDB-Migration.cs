@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace schedule_api.Migrations
 {
     /// <inheritdoc />
-    public partial class TransitInfoDBCreateMigration : Migration
+    public partial class TransitInfoCreateDBMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

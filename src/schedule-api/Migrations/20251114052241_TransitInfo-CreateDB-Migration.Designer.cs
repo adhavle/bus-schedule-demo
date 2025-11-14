@@ -11,8 +11,8 @@ using schedule_api.Services;
 namespace schedule_api.Migrations
 {
     [DbContext(typeof(TransitInfoContext))]
-    [Migration("20251114003513_TransitInfoDB-Create-Migration")]
-    partial class TransitInfoDBCreateMigration
+    [Migration("20251114052241_TransitInfo-CreateDB-Migration")]
+    partial class TransitInfoCreateDBMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
