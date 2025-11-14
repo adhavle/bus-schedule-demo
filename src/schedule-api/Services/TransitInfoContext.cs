@@ -7,6 +7,7 @@ namespace schedule_api.Services
     {
         public DbSet<TopLevelRoute> TopLevelRoutes { get; set; }
         public DbSet<Entities.Route> Routes { get; set; }
+        public DbSet<Schedule> RouteSchedules { get; set; }
         public DbSet<Stop> Stops { get; set; }
 
         /// <summary>
