@@ -1,5 +1,5 @@
 # Bus Schedule Demo
-![](doc/ux.mp4)
+TBD: add information to this readme.
 
 ## Layout
 
